@@ -1,0 +1,418 @@
+@charset "utf-8";
+
+header.sub {padding:0 39px;background:#20cbd4;color:#fff;-webkit-transition: transform 0.3s ease;transition: transform 0.3s ease;}
+header.sub2{background:#fff;}
+.web-view header.sub {padding:0 70px 0 5px;}
+.web-view header .btn_show {right:30px;}
+
+header .btn_show {right:95px}
+header .btn-comment {position: absolute;top: 50%;right: 55px;width: 24px;height: 24px;margin-top: -12px;background:url('https://images.joins.com/ssully/common/appbar_btn_comment.png') 0 0 no-repeat;background-size:cover;overflow: visible;}
+header .btn-comment .num {position:absolute;top:-5px;left:16px;display:block;padding:1px 3px;min-width:15px;border-radius: 15px;background:#fff;color:#20cbd4;font-size:10px;text-align:center;letter-spacing: -1px;}
+
+
+/**
+ * [상세보기]
+ *
+ */
+.scrolldown header.sub{-webkit-transform: translateY(-60px);transform: translateY(-60px);}
+
+.layer_coach {position:fixed;right:0;z-index:300;opacity: 0;visibility: hidden;display:none;top:20px;
+	-webkit-transform: translateY(45px);
+	transform: translateY(45px);
+	animation-duration:4s;
+	animation-name:coach;
+	transform-origin:173px 0;
+}
+.layer_coach:before {content:'';display:block;position:absolute;top:-10px;width:16px;height:13px;left:50%;margin-left:-8px;background:url('https://images.joins.com/ssully/common/renewal/view_coach_arrow.png') 0 0 no-repeat;background-size:100%;z-index: -1;}
+.web-view .layer_coach:before {margin-left:0;left:auto;right:35px;}
+.show-all .layer_coach,
+.scrolldown .layer_coach {visibility: hidden;}
+
+
+
+
+@keyframes coach {
+	0%	{-webkit-transform: translateY(45px);transform: translateY(45px);opacity:0;}
+	20%	{-webkit-transform: translateY(48px);transform: translateY(48px);opacity:1;}
+	40%	{-webkit-transform: translateY(45px);transform: translateY(45px);opacity:1;}
+	60%	{-webkit-transform: translateY(48px);transform: translateY(48px);opacity:1;}
+	80% {-webkit-transform: translateY(45px);transform: translateY(45px);opacity:1;}
+	100% {-webkit-transform: translateY(48px);transform: translateY(48px);opacity:0;}
+}
+.layer_coach img {width:149px;}
+.web-view .layer_coach{right:0;}
+
+
+.chat-view {min-height:100%}
+.chat-view section {padding-top:60px;overflow-y: scroll;}
+.chat-view .tit_area {padding:36px 20px 0 20px;margin-bottom:36px;padding-bottom:15px;border-bottom:1px solid #f5f5f5;background:#fff;opacity:0;-webkit-transition:opacity 3s;-moz-transition:opacity 3s;transition:opacity 3s;position:relative;}
+.chat-view.loaded .tit_area {opacity:1;}
+.chat-view.follow-up .tit_area {opacity:1;-webkit-transition:none;-moz-transition:none;transition:none;}
+
+.title-head {position:relative;margin-bottom:20px;}
+.title-head:after,
+.title-bottom:after {content:'';display:block;clear:both;}
+.chat-view .tit_area .co-label{display:block;margin-top:-16px;height:32px;margin-bottom:10px;}
+.chat-view .tit_area h2{font-size:22px;float:left;width:80%;}
+.chat-view .tit_area .profile{float:right;display:block;overflow:hidden;margin-top:5px;width:46px;height:46px;border-radius:50%;background:url('https://images.joins.com/ssully/common/img_non_list.png') no-repeat 50% 50%;background-size:46px 46px;}
+.chat-view .tit_area .profile img{display:block;width:100%;height:100%;}
+.chat-view .tit_area .co-label img {display:block;height:100%;}
+.title-bottom .time {float:left;display:block;font-size:12px;color:#d8d9db;letter-spacing:0;font-weight:400;}
+.title-bottom .my-btns {float:right;margin-top:-5px;}
+.tit_area .my-btns a.btn-scrap {width:28px;height:28px;background-size:15px;}
+.tit_area .my-btns a.btn-scrap.on {background-size:15px;}
+.tit_area .my-btns a.btn-favorite {margin-left:7px;height:28px;padding:0 8px;font-size:12px;line-height:26px;font-weight:400;}
+.tit_area .my-btns a.btn-favorite:before {width:16px;height:16px;margin-top:-2px;}
+.ios .tit_area .my-btns a.btn-favorite {line-height:29px;}
+
+
+.my-btns a {display:inline-block;vertical-align: middle;border:1px solid #ebeced;border-radius: 25px;}
+.my-btns a.btn-scrap {text-indent:-9999px;background:url('https://images.joins.com/ssully/common/ic_scrap.png') center center no-repeat;-webkit-transition: background .2s;-moz-transition: background .2s;transition: background .2s;}
+.my-btns a.btn-scrap.on {background:url('https://images.joins.com/ssully/common/ic_scrap_on.png') center center no-repeat;}
+.my-btns a.btn-favorite {color:#2f2f35;}
+.my-btns a.btn-favorite span {margin-left:1px;display:inline-block;font-weight:500;}
+.my-btns a.btn-favorite:before {content:'';display:inline-block;vertical-align: middle;background:url('https://images.joins.com/ssully/common/ic_like.png') center center no-repeat;background-size:cover;-webkit-transition: background .2s;-moz-transition: background .2s;transition: background .2s;}
+.my-btns a.btn-favorite.on:before {background:url('https://images.joins.com/ssully/common/ic_like_on.png') center center no-repeat;background-size:cover;}
+
+
+.chat-cont ._list.my-btns {text-align:center;padding:10px 0 40px 0;}
+.chat-cont ._list.my-btns:before {content:none;}
+.chat-cont .my-btns a.btn-scrap {width:48px;height:48px;background-size:24px;}
+.chat-cont .my-btns a.btn-favorite {margin-left:12px;height:48px;line-height:46px;font-size:16px;padding:0 20px;}
+.ios .chat-cont .my-btns a.btn-favorite {line-height:48px;}
+.pc .chat-cont .my-btns a.btn-favorite {line-height:42px}
+.chat-cont .my-btns a.btn-favorite:before {width:24px;height:24px;margin-top:-2px;margin-left:-2px;}
+
+
+.pgbar {position:absolute;left:0;width:100%;height:4px;z-index:201;background:#ebeced;
+	-webkit-transform: translateY(60px);
+	transform: translateY(60px);
+	-webkit-transition: transform 0.3s ease;
+	transition: transform 0.3s ease;
+}
+.pgbar i {display:block;position:absolute;top:0;left:0;width:10%;height:4px;background:#9013fe;-webkit-transition: width 0.3s linear;-moz-transition: width 0.3s linear;transition: width 0.3s linear;}
+.scrolldown .pgbar{-webkit-transform: translateY(60px);transform: translateY(60px);}
+
+.chat-cont {padding:0 15px;background:#fff;}
+.chat-cont .unit {margin-bottom:20px;position:relative;}
+.chat-cont .script li {margin-bottom:5px;word-break:keep-all;}
+.chat-cont .script li:last-child {margin-bottom:0;}
+.chat-cont .right {text-align:right;}
+.chat-cont .left,
+.chat-cont .right .box {text-align:left;}
+.chat-cont .left .script {padding-left:45px;}
+.chat-cont.multi .right .script {padding-right:45px;}
+
+.chat-cont .speaker {position:absolute;top:0;width:35px;height:35px;border-radius: 35px;overflow: hidden;display:none;}
+.chat-cont .speaker img {display:block;width:100%;height:100%;}
+.chat-cont .left .speaker {left:0;}
+.chat-cont .right .speaker {right:0;}
+.chat-cont.default .right .speaker {display:none !important;}
+
+.chat-cont .box {display:inline-block;padding:8px 15px 6px;font-size:15px;letter-spacing: -1px;max-width:275px;word-break: break-all;}
+.chat-cont.multi .box {max-width:255px;}
+
+.chat-cont .emotion {max-width:150px;display:block;}
+.chat-cont .link {width:210px;}
+.chat-cont .link a {display:block;}
+
+.chat-cont .right .box {border-radius: 20px 0 20px 20px;background:#ebeced;}
+.chat-cont .left .box {border-radius: 0 20px 20px 20px;background:#20cbd4;color:#fff;}
+.chat-cont .box.fit {padding:0;background:transparent}
+.chat-cont .box .txt-caption {color:#a0a0a0;font-size:12px;line-height:16px;display:block;color: #a0a0a0;font-size: 12px;font-style: normal;line-height: 16px;overflow: hidden;text-overflow: ellipsis;white-space: normal;text-align: left;word-wrap: break-word;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;clear:both;}
+.chat-cont .right .box .txt-caption {text-align:right;}
+
+.chat-cont .video,
+.chat-cont .video iframe,
+.chat-cont .trg-layer {display:inline-block;position:relative;border-radius: 16px !important;max-height:180px;max-width:100%;width:auto;}
+.chat-cont .video {overflow:hidden;}
+
+.chat-cont .right .trg-layer {float:right;margin-bottom:3px;}
+
+
+.chat-cont .trg-layer img {display:block;max-height:180px;border-radius: 16px;}
+.chat-cont .trg-layer .expand {position:absolute;text-indent: -9999px;overflow:hidden;font-size:0;right:7px;bottom:7px;width:24px;height:24px;background:url('https://images.joins.com/ssully/common/ico_expand.png') 0 0 no-repeat;background-size:100% 100%;}
+
+.chat-cont .video iframe {display:block;width:100%;}
+
+.chat-cont .link .thumb {height:105px;overflow:hidden;border-top-left-radius: 16px;border-top-right-radius: 16px;background:url('https://images.joins.com/ssully/common/renewal/img_non_list.png') center center no-repeat;position:relative;}
+.chat-cont .link .thumb img {border-top-left-radius: 16px;border-top-right-radius: 16px;min-height:105px;width:100%;display:block;position:absolute;top:0;left:0;right:0;bottom:0;}
+.chat-cont .link .caption {padding: 10px 15px 8px 15px;border-bottom-left-radius: 16px;border-bottom-right-radius: 16px;}
+.chat-cont .link .caption p {max-height:37px;overflow:hidden;}
+.chat-cont .link .caption .source {display:block;margin-top:7px;font-size:12px;opacity: .6}
+.chat-cont .left .link .caption {background:#20cbd4;color:#fff;}
+.chat-cont .right .link .caption {background:#ebeced;}
+
+
+.chat-cont ._list {margin-top:20px;font-size:14px;}
+.chat-cont ._list:before {display:block;content:'';height:10px;background:#f5f5f5;border-top:1px solid #ebeced;margin:0 -15px;}
+.chat-cont ._list .title-list {margin-top:10px;text-indent:-9999px;height:56px;border-bottom:1px solid #eee;}
+.chat-cont .summary .title-list {background:url('https://images.joins.com/ssully/common/img_summary.png') 0 0 no-repeat;background-size:auto 100%;margin-bottom:10px;}
+.chat-cont .recommend .title-list {background:url('https://images.joins.com/ssully/common/img_recommend.png') 0 0 no-repeat;background-size:auto 100%;}
+.chat-cont .summary-list li {margin-top:10px;padding-left:25px;position:relative;word-break:break-all;}
+.chat-cont .summary-list li:before {content:'';display:block;position: absolute;top: 1px;left: 0;width: 18px;height: 18px;margin-right: 5px;}
+.chat-cont .summary-list li:first-child {margin-top:0;}
+.chat-cont .summary-list li:first-child:before {background:url('https://images.joins.com/ssully/common/renewal/num_1.png');background-size:100%;}
+.chat-cont .summary-list li:first-child + li:before {background:url('https://images.joins.com/ssully/common/renewal/num_2.png');background-size:100%;}
+.chat-cont .summary-list li:first-child + li + li:before {background:url('https://images.joins.com/ssully/common/renewal/num_3.png');background-size:100%;}
+
+.chat-cont .recommend-list li {border-bottom:1px solid #eee;}
+.chat-cont .recommend-list li:last-child {border-bottom:none;}
+.chat-cont .recommend-list a {display:table;table-layout: fixed;width:100%;padding:15px 0;}
+.chat-cont .recommend-list div {display:table-cell;vertical-align: middle;}
+.chat-cont .recommend-list .thumb {width:40px;height:40px;border-radius: 40px;position:relative;}
+.chat-cont .recommend-list .thumb:before {content:'';display:block;position:absolute;left:0;top:50%;width:38px;height:38px;margin-top:-19px;background:url(https://images.joins.com/ssully/common/img_non_list.png) no-repeat 50% 50%;background-size:cover;border-radius: 100%;}
+.chat-cont .recommend-list .thumb img {display:block;width:100%;height:100%;border-radius: 100%;position:relative;}
+.chat-cont .recommend-list .txt {padding-left:15px;line-height:1.4;}
+.chat-cont .recommend-list .txt span {display:block;}
+.chat-cont .recommend-list .subject {font-size:14px;color:#2f2f35;}
+.chat-cont .recommend-list .date {font-size:12px;color:#d8d9db;letter-spacing: -0.2px;}
+
+
+/*
+	btn
+ */
+/*.chat-cont .btn-continue {position:fixed;left:0;bottom:-200px;width:100%;
+	transition: bottom 600ms;}
+	*/
+.chat-cont .btn-continue {position:fixed;left:0;bottom:-200px;width:100%;height:120px;
+		transition: bottom 600ms;}
+.chat-cont .go-next {display:inline-block;vertical-align:bottom;position:relative;left:50%;bottom:0;padding-top:42px;width:250px;margin-left:-125px;
+	animation-name: nextbtn;
+	animation-duration:4s;
+	animation-iteration-count: infinite;
+	transform-origin:0 0;}
+@keyframes nextbtn {
+	0% {top:0;}
+	8% {top:-10px;}
+	16% {top:0;}
+	24% {top:-10px;}
+	32% {top:0;}
+	40% {top:-10px;}
+	48% {top:0;}
+}
+.chat-cont .go-next span {display:inline-block;min-width:140px;padding:9px 20px 8px;background:#001828;border-radius:23px;color:#fff;margin:2px auto 20px;font-size:16px;box-shadow:0 10px 13px rgba(0,0,0,0.2);letter-spacing:-1px;}
+.chat-cont .go-next:after {position:absolute;top:0;right:56px;content:'';display:block;width:60px;height:0;background:url('https://images.joins.com/ssully/common/btn_cha01.png') 0 0 no-repeat;background-size:60px auto;
+	opacity:0;
+	transform: scale(0);
+	transform-origin: 0 100%;
+	transition: all .7s cubic-bezier(.82,.05,.2,1.15);}
+.chat-cont .go-next:before {content:'';position:absolute;top:0;right:56px;content:'';display:block;width:60px;height:49px;background:url('https://images.joins.com/ssully/common/btn_cha02.png') 0 0 no-repeat;background-size:60px auto;
+	opacity:0;
+	transform: scale(0);
+	animation-delay: 4s;
+	animation-duration:4s;
+	transform-origin:0 0;
+	animation-name: question;
+	animation-iteration-count: infinite;
+	transform-origin: 0 100%;
+	transition: all .7s cubic-bezier(.82,.05,.2,1.15); }
+.chat-cont .btn-continue.loaded .go-next:before {
+	opacity:1;
+	transform: scale(1);
+}
+@keyframes question {
+	50% {transform: rotate(0deg);}
+	55% {transform: rotate(2deg);}
+	60% {transform: rotate(0deg);}
+	65% {transform: rotate(2deg);}
+	70% {transform: rotate(0deg);}
+	75% {transform: rotate(2deg);}
+	80% {transform: rotate(0deg);}
+}
+
+
+
+
+
+
+
+
+/* UI 가이드 이미지 */
+#coachmark	 {position:absolute;top:0;right:0;bottom:0;left:0;z-index:1000;background:#2B2C33;opacity:.9;cursor:pointer;}
+#coachmark * {text-indent:-9999px;font-size:0;}
+#coachmark > div {z-index:1001;position:absolute;}
+#coachmark .coach1 {width:145px;height:124px;background:url('https://images.joins.com/ssully/common/renewal/view_guide_1.png') 0 0 no-repeat;background-size:100%;top:5px;right:80px;}
+
+.web-view #coachmark .coach1 {right:18px;}
+
+#coachmark .coach2 {left:50%;bottom:10px;margin-left:-150px;width:300px;height:118px;background:url('https://images.joins.com/ssully/common/renewal/view_guide_3.png') 0 0 no-repeat;background-size:100%;}
+#close-coachmark {position:absolute;display:block;top:20px;left:15px;width:24px;height:24px;background:url('https://images.joins.com/ssully/common/coachmark_btn_close.png') 0 0 no-repeat;background-size:100%;}
+
+/* 이미지 뷰 레이어 */
+#imgView.fulllayer {background-color:#202020;top:50px;}
+#imgView .layer_pop {position:relative;display:table;width:100%;height:100%;text-align:center;}
+#imgView .layer_header {z-index:201;position:fixed;top:50px;left:0;width:100%;height:60px;background:rgba(0,0,0,.8);transition:top .3s;}/* 2018-01-22 수정 */
+#imgView .layer_header h2 {width:75%;height:60px;margin:0 auto;color:#fff;text-align:center;font-size:16px;letter-spacing:-1.8px;box-sizing:border-box;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:60px;font-weight:500;vertical-align:top;}
+#imgView .layer_pop .thumb {display:table-cell;width:100%;vertical-align:middle;text-align:center;}
+#imgView .layer_pop .thumb .inner_box{display:block;max-height:100%}
+html>body #imgView .layer_pop .thumb img{width:100%;}
+#imgView .layer_pop .caption {position:absolute;bottom:0;left:0;width:100%;min-height:94px;padding:4px 20px 40px 20px;background:rgba(0,0,0,.6);box-sizing:border-box;text-align:left;line-height:18px;transition:bottom .3s;z-index: 200;}
+#imgView .layer_pop .caption p {display:table-cell;width:100%;height:50px;color:#dedede;font-size:14px;margin-bottom:5px;vertical-align:middle;}
+#imgView .layer_pop .caption span {color:#5b5b5b;font-size:15px;}
+#imgView .layer_pop .btn_closed {display:inline-block;overflow:hidden;position:absolute;top:50%;left:16px;width:24px;height:24px;margin-top:-12px;background:url('https://images.joins.com/ssully/common/appbar_btn_close.png') no-repeat 0 0;background-size:24px 24px;}
+#imgView .layer_pop .btn_closed span{font-size:0;line-height:0;text-indent:-9999px;}
+#imgView.hf_hide .layer_header {top:-100px;}
+#imgView.hf_hide .layer_pop .caption {bottom:-100px;}
+
+.pc .layer_coach {position:absolute;}
+.write.container {background:#fff;}
+.pc #imgView .layer_header,
+.pc .fulllayer {left:50%;max-width:414px;margin-left:-207px;}
+.pc .pgbar {overflow:hidden;width:414px;max-width:414px;}
+
+.layer_sns {position:absolute;left:0;bottom:-100em;width:100%;height:auto;padding:15px 0 0;margin:0;background:#fff;z-index:300;
+	transition:bottom .5s cubic-bezier(0.23, 1, 0.32, 1)}
+.layeron .layer_sns {bottom:0;}
+.fulllayer .layer_sns .tit_sub{font-size:16px;}
+.layer_sns ul{overflow:hidden;display:block;padding:20px 0;}
+.layer_sns li{float:left;width:20%;height:75px;font-size:13px;text-align:center;}
+.layer_sns li a {display:inline-block;width:100%;height:100%;margin:0 auto;color:#2f2f35;}
+.layer_sns li a:before{content:'';display:block;width:50px;height:50px;margin:0 auto 7px;}
+.layer_sns li a.kk:before {background:url('https://images.joins.com/ssully/svg/ic_share_katalk.svg') no-repeat 0 0;background-size:50px 50px;}
+.layer_sns li a.fb:before {background:url('https://images.joins.com/ssully/svg/ic_share_fb.svg') no-repeat 0 0;background-size:50px 50px;}
+.layer_sns li a.tw:before {background:url('https://images.joins.com/ssully/svg/ic_share_tw.svg') no-repeat 0 0;background-size:50px 50px;}
+.layer_sns li a.ml:before {background:url('https://images.joins.com/ssully/svg/ic_share_mail.svg') no-repeat 0 0;background-size:50px 50px;}
+.layer_sns li a.url_copy:before {background:url('https://images.joins.com/ssully/svg/ic_share_url.svg') no-repeat 0 0;background-size:50px 50px;}
+.layer_sns .btn_txt.btn_close{display:block;position:static;width:100%;height:50px;background:#fff;border-top:1px solid #f5f5f5;text-align:center;color:#b5b7bc;font-weight:bold;font-size:15px;}
+
+.fulllayer{visibility: hidden;position:fixed;top:0;opacity:0;left:0;width:100%;height:100%;min-height:100%;background-color:rgba(32,32,32,0.5);z-index:200;-webkit-transition: all .3s;-moz-transition: all .3s;transition: all .3s;}
+.fulllayer .tit_sub{display:block;height:auto;margin-bottom:-2px;line-height:normal;font-size:16px;text-align:center;font-weight:600;}
+
+.layeron{display:block !important;}
+.fulllayer.layeron{visibility: visible;opacity: 1;}
+#imgView.fulllayer.layeron,
+#imgView.fulllayer.layeron .layer_header {top:0;}
+#imgView.fulllayer.layeron.hf_hide .layer_header {top:-100px;}
+.layeron .layer_login {width:100%;bottom:0;}
+
+.show-all section {height:auto !important;overflow-y:inherit;}
+.show-all.chat .block {display:block !important;}
+.show-all.chat .block dt {display:block}
+.show-all.chat .article_info dd {display:block !important;}
+.show-all.chat .article_info dd span {opacity:1;transform: scale(1);}
+.show-all.chat .summary dd {display:block !important;}
+.show-all.chat .summary dd span {display:block !important;opacity:1}
+
+.web-view .layer_coach{right:0;}
+.web-view.chat section.wheel .btn_area {margin-top:0;}
+.web-view.chat.show-all .article_info dd:first-of-type:before,
+.web-view.chat .article_info dd.on:first-of-type:before {background-size:11.5px auto;outline:1px solid #fff}
+
+/*앱 광고배너 : 2018.04.17*/
+.has-banner.chat-view header.sub {top:50px;}
+.has-banner.chat-view section {padding-top:110px;}
+.has-banner.scrolldown header.sub {-webkit-transform: translateY(-60px);transform: translateY(-60px);}
+#link-to-app {position:fixed;top:0;left:0;width:100%;height:50px;background:#f5f5f5;z-index: 200;border-bottom:1px solid #d8d9db}
+#close-app-banner {position:absolute;left:10px;top:15px;width:20px;height:20px;text-indent:-9999px;background:url('https://images.joins.com/ssully/common/ad/banner_btn_close.png') center center no-repeat;background-size:15px 15px;}
+#goto-store {position:absolute;right:15px;top:18px;padding-right:20px;font-size:11px;color:#20cbd4;font-weight:600;}
+#goto-store:after {content:'';display:block;position:absolute;top:-1px;right:0;width:15px;height:15px;background:url('https://images.joins.com/ssully/common/ad/ic_download.png') center center no-repeat;background-size:10px 12px;}
+#link-to-app .banner-description {margin:9px 0 0 75px;font-size:12px;position:relative;color:#2f2f35;line-height:1.4;}
+#link-to-app .banner-description strong {font-weight:600}
+#link-to-app .banner-description:before {content:'';display:block;position:absolute;top:2px;left:-35px;width:28px;height:28px;background:url('https://images.joins.com/ssully/common/ad/ic_appdown.png') 0 0 no-repeat;background-size:100%;}
+
+
+
+.chat-cont .btn-continue.loaded {bottom:0;}
+.chat-cont .btn-continue.loaded .go-next:after {height:49px;opacity:1;transform: scale(1);}
+.chat-view .wheel .btn-continue {position:relative;display:none;}
+.chat-view .wheel .btn-continue.loaded {display:block;padding-top:2px;}
+
+
+.roll-wrapper.wheel .btn-continue {position:relative;display:none;}
+.roll-wrapper.wheel .btn-continue.on {display:block;padding-top:18px;}
+
+
+.roll-container,
+.roll-block {display:none;}
+.roll-item {opacity: 0; height: 0;overflow: hidden;}
+
+.roll-container.loaded,
+.roll-block.loaded {display:block}
+.roll-item.loaded  {opacity: 1;height:auto;}
+
+.roll-container.dim {visibility:hidden;}
+
+.chat-view .part.loaded {padding-bottom:140px;margin-top:-140px;}
+.chat-view .part.last {padding-bottom:0 !important;}
+.chat-view .part.read {margin-top:0;padding-bottom:0;}
+.chat-view .part.loaded:first-child {margin-top:0;}
+.chat-view .part.from {margin-top:0;}
+.roll-wrapper.wheel .part.read.done {padding-bottom:0;}
+
+
+.roll-wrapper.wheel .part.complete {padding-bottom:0;}
+.roll-wrapper.wheel .part.done {padding-bottom:140px;}
+
+.chat-cont .btn-continue.loaded {bottom:0;}
+.chat-cont .btn-continue.loaded .go-next:after {height:49px;opacity:1;transform: scale(1);}
+.chat-view .wheel .btn-continue {position:relative;display:none;text-align:center;}
+.chat-view .wheel .btn-continue.loaded {display:block;padding-top:10px;}
+.chat-cont.wheel .go-next {left:0;margin:0 auto;}
+
+
+.roll-item .box {opacity:0;position:relative;}
+
+.roll-wrapper .roll-item .box {opacity:0;}
+.roll-wrapper .roll-item.loaded .box {opacity:1;}
+
+
+.chat-cont .summary,
+.chat-cont .recommend {opacity:0;-webkit-transition: opacity .25s;-moz-transition: opacity .25s;transition: opacity .25s;}
+.chat-cont .summary.loaded,
+.chat-cont .recommend.loaded {opacity:1;}
+.chat-cont .recommend {margin-bottom:0;}
+.chat-cont .recommend:after {content:'';display:block;height:10px;background:#f5f5f5;border-top:1px solid #ebeced;margin:0 -15px;}
+
+.chat-view.show-all .tit_area {opacity: 1;-webkit-transition: none;-moz-transition: none;-ms-transition: none;transition: none;}
+.chat-view.show-all .roll-container,
+.chat-view.show-all .roll-block {display:block;}
+.chat-view.show-all .roll-item {opacity: 1; height: auto;overflow: hidden;}
+.chat-view.show-all .roll-item .box {transition:all .25s;transform:scale(.9);}
+.chat-view.show-all .roll-item.view .box {opacity: 1;transform:scale(1);}
+.chat-view.show-all .chat-cont .speaker {opacity:0;transform:scale(.9);display:block;-webkit-transition: all .4s;-moz-transition: all .4s;transition: all .4s;}
+.chat-view.show-all .chat-cont .speaker.view {opacity:1;transform:scale(1)}
+.chat-view.show-all .chat-cont .summary,
+.chat-view.show-all .chat-cont .recommend {opacity:1;}
+
+
+/* 퀴즈 이벤트 배너 */
+.quiz-evt {margin:0 -15px;margin-bottom:0 !important;padding:7px 25px;background:#f5f5f5}
+._list.quiz-evt:before {content:none;}
+.quiz-evt + ._list {margin-top:0;}
+.quiz-evt + ._list:before {content:none;}
+.quiz-evt a {display:block;border-radius: 12px;}
+.quiz-evt img {display:block;border-radius: 12px;max-height:100px;margin:0 auto;}
+
+
+/*
+.layer_msg .content{position:absolute;left:0;top:50%;width:80%;height:300px;margin:-150px 10% 0;background:#fff;}
+.layer_msg .content .msg{position:relative;height:100%;padding:0 16px;text-align:center;}
+.layer_msg .ic_ok{display:inline-block;width:120px;height:110px;margin:40px auto 0;background:url('https://images.joins.com/ssully/common/img_ok.png') no-repeat 0 0;background-size:120px 110px;}
+.layer_msg .btn_close{position:absolute;top:auto;right:auto;left:0;bottom:0;width:100%;height:50px;background:none;border-top:1px solid #f5f5f5;text-align:center;color:#20cbd4;font-size:14px;}
+.layer_msg .txt_b{display:block;font-size:16px;font-weight:500;}
+.layer_msg .txt{margin-top:5px;color:#b5b7bc;font-size:11px;}
+.layer_msg .btn_close {width:50%;color:#b5b7bc;}
+.layer_msg .btn_confirm {left:50%;width:50%;position: absolute;top: auto;right: auto;left: 50%;bottom: 0;height: 50px;background: none;border-top: 1px solid #f5f5f5;border-left:1px solid #f5f5f5;text-align: center;color: #20cbd4;font-size: 14px;font-weight:600;}
+.layer_msg .full {width:100%;left:0;border-left:none;}
+#layer_loginbox .ic_ok {background-image:url('https://images.joins.com/ssully/common/renewal/img_lock.png');}
+*/
+
+
+
+/**
+ * Media queries
+ *
+ */
+
+@media screen and (max-width:340px){
+    #close-app-banner {left:8px;}
+	#link-to-app .banner-description {font-size:11px;margin-left:75px;}
+	#goto-store {right:12px;font-size:11px;}
+}
+
+@media screen and (max-width: 320px){
+    .chat .article_info dd.movie > span,
+	.chat .article_info dd.movie iframe {max-width:245px !important;}
+
+}

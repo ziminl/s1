@@ -1,0 +1,600 @@
+function checkTitle() {
+    var txtLength = $('.btn_tit').text().length;
+    var txtWidth = $('.btn_tit').width() + 26;
+    var headingWidth = $('header h2').width();
+
+    if (headingWidth > txtWidth) {
+        $('.btn_tit').addClass('short');
+    } else {
+        $('.btn_tit').removeClass('short')
+    }
+}
+
+function msieversion() {
+    var ie_flag = false;
+
+    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0){
+        ie_flag = true;
+    }
+
+    return ie_flag;
+}
+
+function isNumberKey(evt)
+  {
+    var e = evt || window.event;
+    var charCode = e.which || e.keyCode;
+    if (charCode > 31 && (charCode < 47 || charCode > 57))
+    return false;
+    if (e.shiftKey) return false;
+    return true;
+ }
+
+
+ /* 2018.12 로그인 start */
+ function show_loginlayer(type,fn){
+     var txt = "";
+
+     switch(type){
+         case 'reply':
+             txt = "지금 로그인하고 댓글을 입력해보세요";
+             break;
+         case 'like':
+             txt = "로그인하면 좋아요 기능을 사용할 수 있어요";
+             break;
+         case 'accusation':
+             txt = "로그인 후 신고 기능을 사용할 수 있습니다";
+             break;
+         case 'scrap':
+             txt = "지금 로그인하고 원하는 기사를 스크랩 하세요";
+             break;
+         case 'inquire':
+             txt = "지금 로그인하고 썰리에게 직접 물어보세요";
+             break;
+         default:
+             break;
+     }
+
+    $("#layer_loginbox").addClass("layeron")
+                         .find('.txt').text(txt);
+
+    $("#layer_loginbox .btn_confirm").one("click",function(e){
+        e.preventDefault();
+        fn();
+    });
+ }
+ /* 2018.12 로그인 end */
+
+
+
+/**
+ * [IOS 기본스크롤 제어]
+ * scroll-cont클래스에는 스크롤 작동 (-webkit-overflow-scrolling:touch)
+ */
+function preventIosScrolling() {
+
+    // Disable scroll for the document, we'll handle it ourselves
+    document.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+    }, { passive: false });
+
+   // Check if we should allow scrolling up or down
+   $(document.body).on("touchstart", ".scroll-cont", function (e) {
+       // If the element is scrollable (content overflows), then...
+       if (this.scrollHeight !== this.clientHeight) {
+           // If we're at the top, scroll down one pixel to allow scrolling up
+           if (this.scrollTop === 0) {
+               this.scrollTop = 1;
+           }
+           // If we're at the bottom, scroll up one pixel to allow scrolling down
+           if (this.scrollTop === this.scrollHeight - this.clientHeight) {
+               this.scrollTop = this.scrollHeight - this.clientHeight - 1;
+           }
+       }
+       // Check if we can scroll
+       this.allowUp = this.scrollTop > 0;
+       this.allowDown = this.scrollTop < (this.scrollHeight - this.clientHeight);
+       this.lastY = e.originalEvent.pageY;
+   });
+
+   $(document.body).on('touchmove', ".scroll-cont", function(e) {
+       var event = e.originalEvent;
+       var up = event.pageY > this.lastY;
+       var down = !up;
+       this.lastY = event.pageY;
+
+       if ((up && this.allowUp) || (down && this.allowDown)) {
+           event.stopPropagation();
+       } else {
+           event.preventDefault();
+       }
+   });
+}
+
+
+
+function getMobileOperatingSystem() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (/windows phone/i.test(userAgent)) return "window_phone";
+    if (/android/i.test(userAgent)) return "android";
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return "ios";
+
+    return "unknown";
+}
+
+var _ui = {
+    "detect_endView":function(curTop){
+        var scroll_end = curTop + $(window).height();
+        var flag;
+
+        if(scroll_end > $(document).height()-60) flag=true;
+        else flag=false;
+        return flag;
+    }
+};
+
+
+$( window ).resize(function() {
+    checkTitle();
+
+    var winH = $(window).height(),
+		btH = $('.bt').height(),
+		hdH = $('.hd').height();
+    $('.chat section').css('height', winH); // ver3 수정
+
+});
+
+
+$(function () {
+
+
+    checkDevice();
+    checkTitle();
+    headerSticky(); // ver3 추가
+    ssullyAcc(); // ver3 추가
+
+    $("body").addClass(getMobileOperatingSystem());
+
+    // 타이틀 팝업
+    $('header .btn_tit').on('click', function () {
+        $('.tit_layer').addClass('layeron');
+    });
+    $('.tit_layer').on('click', function () {
+        $('.tit_layer').removeClass('layeron');
+    });
+
+
+    //init
+    var imgW = $('dd span img').width(),
+		docW = $('.container').width(),
+		winH = $(window).height(),
+		btH = $('.bt').height(),
+		hdH = $('.hd').height();
+    docH = $(document).height(),
+    findDd = $("section").find("dd"),
+    divSec = $("section");
+
+    // chat 높이 : ver3 수정
+    $('.chat section').css('height', winH);
+    $('.error section').css('height', winH);
+    //$('.chat .summary dd img').css('width', 228); ver3 삭제
+    $('.block, .particle dd').hide();
+
+
+    /**-------------------------------
+     * image view - start
+     * [2018.05.25]
+     */
+
+     var _image = document.getElementById('zoomimg');
+
+     if(_image){
+         var mc = new Hammer.Manager(_image);
+         var pinch = new Hammer.Pinch();
+         var pan = new Hammer.Pan();
+
+         pinch.recognizeWith(pan);
+         mc.add([pinch, pan]);
+
+         var adjustScale,adjustDeltaX,adjustDeltaY;
+         // 변환 scale, translate 변수
+         var currentScale, currentDeltaX, currentDeltaY;
+         // tranlate 범위 제한을 위한 변수
+         var imgWidth_origin = $(window).width(),
+             imgWidth_new = $(window).width(),
+             imgHeight_origin,
+             imgHeight_new,
+             win_height = $(window).height();
+         var limitWidth,limitHeight;
+         var transforms;
+
+
+         // 이미지 레이어 open
+         $('dd.img span, .trg-layer').on('click', function () {
+
+             try{if (($(this).parent().parent()).hasClass('summary')) {return;}}catch(e){}/*3줄요약이미지 제외*/
+             $('#imgView').addClass('layeron');
+             var imgUrl = $(this).find("img").attr('src');
+             var imgtitle = $(this).find("img").attr('title');
+             var stateObj = { foo: "bar" };
+             history.pushState(stateObj, "page 2", location.href);
+             $('#imgView .thumb img').attr('src', imgUrl);
+
+             if (imgtitle == undefined || imgtitle == '') { $('#imgView').find("div.caption").remove(); } else {
+                 if ($('#imgView .thumb div').is(".caption")) {
+                     $('#imgView .thumb .caption').html("<p>" + imgtitle + "</p>");
+                 } else {
+                     $('#imgView .thumb').append("<div class=\"caption\"><p>" + imgtitle + "</p></div>");
+                 }
+             }
+
+             // 레이어 활성화시 imagezoom 관련 변수 초기화
+             transforms=[];
+             adjustScale=1,
+             adjustDeltaX=0,
+             adjustDeltaY=0;
+             currentScale,currentDeltaX,currentDeltaY=null;
+             transforms.push('scale(1) translate(0,0)');
+             _image.style.transform = transforms.join(' ');
+
+             // 새로운 이미지 높이 재설정
+             imgHeight_origin = _image.clientHeight;
+             imgHeight_new = _image.clientHeight;
+         });
+
+
+
+          // Event
+          mc.on("pinch pan", function (ev) {
+              transforms = [];
+
+              currentScale = adjustScale * ev.scale;
+              currentDeltaX = adjustDeltaX + (ev.deltaX / currentScale);
+              currentDeltaY = adjustDeltaY + (ev.deltaY / currentScale);
+
+              // scale level이 원본보다 작으면 1로
+              if(currentScale<1) currentScale=1;
+
+              // 확대된 이미지 크기 계산
+              imgWidth_new = imgWidth_origin*currentScale;
+              imgHeight_new = imgHeight_origin*currentScale;
+
+
+              // translateX 최대 최소값 계산, 세팅
+              limitWidth = (imgWidth_new-imgWidth_origin)/(2*currentScale);
+              if(currentDeltaX<-limitWidth) currentDeltaX=-limitWidth;
+              if(currentDeltaX>limitWidth) currentDeltaX=limitWidth;
+
+              // translateY 최대 최소값 계산, 세팅
+              if(imgHeight_new>win_height){
+                  limitHeight = (imgHeight_new-win_height)/(2*currentScale);
+                  if(currentDeltaY<-limitHeight) currentDeltaY=-limitHeight;
+                  if(currentDeltaY>limitHeight) currentDeltaY=limitHeight;
+              }else{
+                  currentDeltaY=0;
+              }
+
+              // css push
+              transforms.push('scale(' + currentScale + ')');
+              transforms.push('translate(' + currentDeltaX + 'px, '+currentDeltaY+ 'px)');
+              _image.style.transform = transforms.join(' ');
+
+
+          }).on("panend pinchend", function (ev) {
+              adjustScale = currentScale;
+              adjustDeltaX = currentDeltaX;
+              adjustDeltaY = currentDeltaY;
+          });
+     }
+
+     /**
+      * image view - end
+      * [2018.05.25]
+      --------------------------------------------*/
+    window.onpopstate = function (event) {
+        //   history.forward();
+        if ($('#imgView').find('layeron')) {$('#imgView').removeClass('layeron');}
+    };
+
+    $('#imgView').click(function (e) {
+        $(this).toggleClass("hf_hide");
+
+        var _caption = $(this).find(".caption");
+        var _caption_height;
+
+        if(_caption.length>0){
+            _caption_height = _caption.outerHeight();
+        }
+
+        if(!$(this).hasClass("hf_hide")){
+            _caption.css({
+                bottom:0
+            });
+        }else{
+            _caption.css({
+                bottom:-_caption_height+"px"
+            });
+
+        }
+    });
+
+    $('.layer_pop .btn_closed').click(function (e) {
+        history.back();
+        e.stopPropagation();
+        $('#imgView').removeClass('layeron, hf_hide');
+    });
+
+    //sns공유 열기
+    $(".btn_share").on('click', function () {
+        setTimeout(function () {
+            $("#layer_share").toggleClass("layeron");
+            return false;
+        });
+        $('#layer_share').show();
+    });
+    $(".layer_sns .btn_close").on('click touchstart', function () {
+        $('#layer_share').hide().removeClass("layeron"); // 2018-01-09 수정
+        return false;
+    });
+
+    $("#layer_loginbox .btn_close").on('click touchstart', function () {
+        $('#layer_loginbox').removeClass("layeron");
+        return false;
+    });
+
+
+
+
+    // Lnb 수정 start : 2018.05.03
+    var _lnb = $(".ssully_lnb");
+    if(_lnb.length){
+        var init_leftOffset;
+        var offset_top_val;
+
+        var set_lnb = function(type){
+            var str_css ="",
+                var_offset = 0;
+
+            $("body").hasClass("mobile") ? init_leftOffset=$(window).outerWidth()
+                                         : init_leftOffset='414'
+
+             switch(type){
+                 case 'def':
+                     var_offset = -init_leftOffset;
+                     break;
+                 case 'zero':
+                     var_offset = 0;
+                     break;
+                 case 'half':
+                     var_offset = -init_leftOffset/2;
+                     break;
+             }
+
+             str_css = {
+                 width : init_leftOffset+"px",
+                 marginLeft : var_offset
+             };
+
+             return str_css;
+        };
+
+        $(window).resize(function(){
+            var half_stat = set_lnb('half'),
+                def_stat = set_lnb('def'),
+                zero_stat = set_lnb('zero');
+
+            (!_lnb.hasClass("active")) ? _lnb.css(def_stat).find(".dim").css(half_stat)
+                                        : _lnb.css(zero_stat).find(".dim").css(half_stat)
+
+
+        }).trigger("resize");
+
+
+        $(".menu").on("click",function(e){
+            e.preventDefault();
+            $("body").addClass("disabled");
+
+            _lnb.addClass("active").css({
+                    height:window.innerHeight+'px'
+                }).stop().animate({
+                    marginLeft:0,
+                },200,function(){
+                    offset_top_val = $(window).scrollTop();
+
+                    if($("body").hasClass("mobile")){
+                        $("body.disabled").css({
+                            position:'fixed'
+                        });
+                    }
+                });
+        });
+        $(".btn_layer_close").on("click",function(e){
+            e.preventDefault();
+            $("body").removeClass("disabled");
+            if($("body").hasClass("mobile")){
+                $("body").css({
+                    position:'static'
+                });
+
+                $(window).scrollTop(offset_top_val);
+            }
+            _lnb.removeClass("active").stop().animate({
+                marginLeft:-init_leftOffset+'px'
+            },200);
+        });
+
+        $(window).on({
+            'scroll':function(){
+                if($("body").hasClass("pc")){
+                    _lnb.css({
+                        top:$(window).scrollTop()
+                    })
+                }
+            },
+            'resize':function(){
+                if(!_lnb.find(".my-profile").length){
+                    _lnb.css({
+                        height:window.innerHeight+'px'
+                    }).find(".con").css({
+                        paddingTop:$(".nav-title").height()
+                    });
+                }else{
+                    _lnb.css({
+                        height:window.innerHeight+'px'
+                    });
+                }
+            }
+        });
+
+
+    }
+    // Lnb 수정 end
+
+    // 앱 광고 배너
+    if($("#link-to-app").length > 0 && $("body").hasClass("mobile")){
+
+        $(".container").addClass("has-banner");
+
+        $("#close-app-banner").on("click",function(e){
+            e.preventDefault();
+            $(".container").removeClass("has-banner");
+            $("#link-to-app").hide();
+        });
+    }
+
+
+
+
+
+
+
+
+
+});
+
+
+
+// 접속 디바이스를 확인합니다(데스크탑:false, 모바일:true)
+function checkDevice() {
+    if (navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
+        $('body').addClass('mobile');
+        //		alert('Mobile 접속');
+        return true;
+    } else {
+        $('body').addClass('pc')
+        //		alert('PC 접속')
+        return false;
+    }
+}
+
+/* ver3 상세해더 sticky */
+function headerSticky(){
+    var $didScroll = null,
+        st = null,
+        delta = 5,
+        $lastTop = $(this).scrollTop(),
+        $headerHeight = $('header.sub').outerHeight(),
+        $totallHeight = null;
+
+    $(window).stop().on('touchmove mousewheel DOMMouseScroll scroll',function(){
+        $didScroll = true;
+        bindEvent();
+    });
+    $('section').stop().on('touchmove mousewheel DOMMouseScroll scroll',function(){
+        $didScroll = true;
+        bindEvent();
+    });
+
+
+    function bindEvent(){
+        setInterval(function() {
+            if ($didScroll) {
+                hasScrolled();
+                $didScroll = false;
+            }
+        }, 100);
+    }
+
+    var setScrollDown = function(){
+        $('.container').addClass('scrolldown');
+    }
+    var setScrollUP = function(){
+        $('.container').removeClass('scrolldown');
+    }
+
+    function hasScrolled(){
+        st = $(window).scrollTop();
+
+        // 채팅 전체보기의 경우만 예외처리
+        if ($('.container').hasClass('chat-view')){
+            st = $('section').scrollTop();
+
+            if ($('.chat-view').hasClass('show-all')){
+                st = $(window).scrollTop();
+            }
+        }
+
+        if(Math.abs($lastTop - st) <= delta)
+        return;
+
+        // 스크롤 방향으로 판단
+        if (st > $headerHeight && st > $lastTop ){
+            setScrollDown();
+
+        }else{
+            if ($('.container').hasClass('chat-view') && !$('.chat-view').hasClass('show-all')){
+                // 채팅보기
+                if ($('section')[0].scrollHeight + st > $('section').outerHeight()){
+                    setScrollUP();
+                }
+            }else{
+                // 채팅 전체보기, 기타 페이지
+                if(st + $(window).height() < $(document).height()){
+                    setScrollUP();
+                }
+            }
+        }
+
+        $lastTop = st;
+        $didScroll = false;
+    }
+};
+
+
+/*
+* 공지사항 accordion : 2018.03.22 수정
+*/
+function ssullyAcc(){
+    var btnAcc = $('.btn_acc');
+    var notice_container = $(".container.notice");
+
+
+    $(window).resize(function(){
+        notice_container.find("section").css({
+            height:$(window).height()
+        });
+    }).trigger("resize");
+
+
+    btnAcc.on('click', function(){
+        var list = $(this).closest(".acc"),
+            items = list.find("li");
+
+
+        if($(this).closest("li").hasClass("active")){
+            items.removeClass("active");
+        }else{
+            items.removeClass("active");
+            $(this).closest("li").addClass("active");
+
+            var topPos = $(this).closest("li").offset().top;
+
+            if($("body").hasClass("android") && $("body").hasClass("mobile")){
+                $("body").animate({scrollTop:topPos-60},200);
+            }else{
+                $("html,body").animate({scrollTop:topPos-60},200);
+            }
+        }
+    });
+}

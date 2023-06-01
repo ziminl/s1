@@ -1,0 +1,236 @@
+﻿function IsStringEmpty(str) { if (str == undefined) { return false; } return (str.replace(/\s/g, "") == ""); }
+function fn_decodeURI(str) {
+    str = str.replace(/&#39;/ig, "'");
+    str = str.replace(/&quot;/ig, "\"");
+    return str;
+}
+var JCookie = new function () {
+    this.SetCookie = function (key, val, expdays, dom) {
+        var TODAY;
+
+        if (expdays) {
+            if (typeof expdays == 'number' || typeof expdays == 'string') {
+                TODAY = new Date();
+                TODAY.setDate(TODAY.getDate() + expdays);
+            } else {
+                TODAY = expdays;
+            }
+        }
+
+        var cookie = key + '=' + escape(val) + ';path=/';
+
+        if (TODAY)
+            cookie += ';expires=' + TODAY.toGMTString();
+
+        if (dom)
+            cookie += ';domain=' + dom;
+
+        document.cookie = cookie;
+    }
+
+    this.GetCookie = function (key) {
+        if (IsStringEmpty(key)) { return ''; }
+        var sidx = document.cookie.indexOf(key + '=');
+        if (sidx >= 0) {
+            sidx += (key.length + 1);
+            var eidx = document.cookie.indexOf(";", sidx);
+            if (eidx < 0) { eidx = document.cookie.length; }
+            return unescape(document.cookie.substring(sidx, eidx));
+        }
+        else { return ''; }
+    };
+    this.GetCookie2 = function (pkey, key) {	/* 쿠키열 중에 subkey의 값을 구한다 */
+        if (IsStringEmpty(key)) { return ''; }
+
+        var pval = this.GetCookie(pkey);
+
+        if (IsStringEmpty(pval)) { return ''; }
+        var sidx = pval.indexOf(key + '=');
+
+        if (sidx >= 0) {
+            sidx += (key.length + 1);
+            var eidx = pval.indexOf("&", sidx);
+
+            if (eidx < 0) { eidx = pval.length; }
+            return unescape(pval.substring(sidx, eidx));
+        }
+        else { return ''; }
+    };
+    this.GetCookieArray = function (key1, key2) {
+        if (IsStringEmpty(key1) || IsStringEmpty(key2)) { return ''; }
+        var key = ('[' + key1 + '][' + key2 + ']');
+        return this.GetCookie(key);
+    };
+}
+
+
+var SSullyStorage = new function() {
+    this.getItem = function (key) {
+        return JSON.parse(localStorage.getItem(key));
+    };
+    this.setItem = function (key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    };
+    this.removeItem = function (key) {
+        localStorage.removeItem(key);
+    };
+    this.isNullOrEmpty = function (key) {
+        var val = SSullyStorage.getItem(key);
+        return val == '' || val == null;
+    }
+};
+
+var SSullyLogin = new function () {
+    $.when(
+        $.getScript('https://www.gstatic.com/firebasejs/5.5.8/firebase-app.js'),
+        $.getScript('https://www.gstatic.com/firebasejs/5.5.8/firebase-auth.js'),
+        $.Deferred(function (deferred) { $(deferred.resolve); })
+    ).done(function () {
+        firebase.initializeApp({
+            apiKey: "AIzaSyBn4gTnfOr_W-63ZLhLTgzYRrrvjAKeBTs",
+            authDomain: "ssully-a9fee.firebaseapp.com",
+            databaseURL: "https://ssully-a9fee.firebaseio.com",
+            projectId: "ssully-a9fee",
+            storageBucket: "ssully-a9fee.appspot.com",
+            messagingSenderId: "799737371132"
+        });
+    });
+
+    var LoginToGoogle = function (returnUrl) {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+
+        firebase.auth().signInWithPopup(provider).then(function (result) {
+            var token = result.credential.accessToken;
+            var user = result.user;
+            var return_url = encodeURIComponent(returnUrl);
+            var $form = $('<form id="__loginForm" method="post" action="/login/callback/firebase?isPopup=N&returnUrl=' + return_url + '">')
+                .append($('<input type="hidden" name="type" value=""/>').val('G'))
+                .append($('<input type="hidden" name="token" value=""/>').val(token))
+                .append($('<input type="hidden" name="uid" value=""/>').val(user.uid))
+                .append($('<input type="hidden" name="email" value=""/>').val(user.email))
+                .append($('<input type="hidden" name="name" value=""/>').val(user.displayName))
+                .append($('<input type="hidden" name="profileimage" value=""/>').val(user.photoURL));
+
+            $('body').append($form);
+            $form.submit();
+        }).catch(function (error) {
+            location.href = '/error/sorry';
+        });
+    };
+    var LoginToFacebook = function (returnUrl) {
+        var provider = new firebase.auth.FacebookAuthProvider();
+
+        provider.addScope('email');
+        firebase.auth().signInWithPopup(provider).then(function (result) {
+            var token = result.credential.accessToken;
+            var user = result.user;
+            var return_url = encodeURIComponent(returnUrl);
+            var $form = $('<form id="__loginForm" method="post" action="/login/callback/firebase?isPopup=N&returnUrl=' + return_url + '">')
+                .append($('<input type="hidden" name="type" value=""/>').val('F'))
+                .append($('<input type="hidden" name="token" value=""/>').val(token))
+                .append($('<input type="hidden" name="uid" value=""/>').val(user.uid))
+                .append($('<input type="hidden" name="email" value=""/>').val(user.email))
+                .append($('<input type="hidden" name="name" value=""/>').val(user.displayName))
+                .append($('<input type="hidden" name="profileimage" value=""/>').val(user.photoURL));
+
+            $('body').append($form);
+            $form.submit();
+        }).catch(function (error) {
+            location.href = '/error/sorry';
+        });
+    };
+    var LoginToTwitter = function (returnUrl) {
+        var provider = new firebase.auth.TwitterAuthProvider();
+
+        firebase.auth().signInWithPopup(provider).then(function (result) {
+            var token = result.credential.accessToken;
+            var user = result.user;
+            var return_url = encodeURIComponent(returnUrl);
+            var $form = $('<form id="__loginForm" method="post" action="/login/callback/firebase?isPopup=N&returnUrl=' + return_url + '">')
+                .append($('<input type="hidden" name="type" value=""/>').val('T'))
+                .append($('<input type="hidden" name="uid" value=""/>').val(user.uid))
+                .append($('<input type="hidden" name="email" value=""/>').val(user.email))
+                .append($('<input type="hidden" name="name" value=""/>').val(user.displayName))
+                .append($('<input type="hidden" name="profileimage" value=""/>').val(user.photoURL));
+
+            $('body').append($form);
+            $form.submit();
+        }).catch(function (error) {
+            location.href = '/error/sorry';
+        });
+    };
+    var LoginToKakao = function (returnUrl) {
+        var win = window.open('/login/kakao?returnUrl=' + encodeURIComponent(returnUrl), 'loginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=400, height=600, left=0, top=0');
+        win.focus();
+    };
+    var LoginToNaver = function (returnUrl) {
+        var win = window.open('/login/naver?returnUrl=' + encodeURIComponent(returnUrl), 'loginpop', 'titlebar=1, resizable=1, scrollbars=yes, width=400, height=600, left=0, top=0');
+        win.focus();
+    };
+
+
+    this.Login = function (type, returnUrl) {
+        returnUrl = returnUrl || '/';
+        switch (type.toUpperCase()) {
+            case 'GOOGLE': LoginToGoogle(returnUrl); break;
+            case 'FACEBOOK': LoginToFacebook(returnUrl); break;
+            case 'KAKAO': LoginToKakao(returnUrl); break;
+            case 'NAVER': LoginToNaver(returnUrl); break;
+        };
+    };
+
+    this.LoginData = function () {
+        if ($.trim(JCookie.GetCookie('ssully_uid')).length == 0 || $.trim(JCookie.GetCookie('ssully_type')).length == 0)
+            return null;
+
+        return {
+            name: JCookie.GetCookie('ssully_name'),
+            profile_url: JCookie.GetCookie('ssully_profile_url'),
+            type: JCookie.GetCookie('ssully_type'),
+            uid: JCookie.GetCookie('ssully_uid')
+        };
+    };
+};
+
+
+var SSullyMobileApp = new function () {
+    var agent = navigator.userAgent.toLowerCase();
+    var isAndroid = (agent.indexOf("android") > -1);
+    var isIOS = ((agent.indexOf("iphone") > -1) || (agent.indexOf("ipad") > -1) || (agent.indexOf("ios") > -1));
+    var sMarketURL = "https://play.google.com/store/apps/details?id=com.joins.joongang.ssully&referrer=utm_source%3Dweb_contentview%26utm_medium%3Dbanner%26utm_campaign%3Dandroid_download_2";
+    var sAppStoreURL = "itms://itunes.apple.com/us/app/apple-store/id1335446055?mt=8";
+    var sHiddenIframe = "_hiddenIframe";
+    var sExecuteURL = isAndroid ? "ssully://intro" : "com.joins.ssully://";
+
+    this.market = function () {
+        if (isAndroid)
+            location.href = sMarketURL;
+        else if (isIOS)
+            location.href = sAppStoreURL;
+        else
+            location.href = '/about';
+    };
+    this.execute = function () {
+        if (!isAndroid && !isIOS) {
+            alert('모바일 앱은 Android 및 iOS만 제공됩니다.');
+            return;
+        }
+
+        // Install App.
+        var b = new Date();
+        setTimeout(function () {
+            if (isIOS && sAppStoreURL > '')
+                window.location.replace(sAppStoreURL);
+            else if (isAndroid && sMarketURL > '')
+                window.location.replace(sMarketURL);
+            $('iframe#' + sHiddenIframe).remove();
+        }, 1500);
+
+        // Execute App.
+        $('iframe#' + sHiddenIframe).remove();
+
+        var $iframe = $('<iframe>').attr('id', sHiddenIframe).css({ 'border': 'none', 'width': '0px', 'height': '0px' }).attr('src', sExecuteURL);
+        $iframe.appendTo(document.body);
+    };
+};

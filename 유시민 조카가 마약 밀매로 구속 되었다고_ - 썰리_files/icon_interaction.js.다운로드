@@ -1,0 +1,60 @@
+var bookmark_canvas = document.querySelector('.anim-canvas.scrap'),
+    like_canvas = document.querySelector('.anim-canvas.like');
+
+
+
+var Interactions = (function() {
+    var anim_instance, flag, settings;
+    var options = {
+        'bookmark' : {
+            container: bookmark_canvas,
+            renderer: 'svg',
+            loop: false,
+            autoplay: false,
+            //path: 'https://static.joins.com/html/mobile/ssuly/html/img/svg/bookmark.json',
+            rendererSettings: {
+                className: 'bookmark'
+            }
+        },
+        'like' : {
+            container: like_canvas,
+            renderer: 'svg',
+            loop: false,
+            autoplay: false,
+            //path: 'https://static.joins.com/html/mobile/ssuly/html/img/svg/love_it.json',
+            rendererSettings: {
+                className: 'like'
+            }
+        }
+    };
+
+
+    function Interactions(type) {
+        switch(type){
+            case 'bookmark':
+                settings = options.bookmark;
+                break;
+            case 'like':
+                settings = options.like;
+                break;
+        }
+
+        this.settings = settings;
+    }
+
+
+    Interactions.prototype.getOptions = function () {
+        return this.settings;
+    };
+    Interactions.prototype.init = function (_obj) {
+        this.anim_instance = lottie.loadAnimation(_obj);
+    };
+    Interactions.prototype.play = function () {
+        this.anim_instance.playSegments([2,30]);
+    };
+    Interactions.prototype.stop = function () {
+        this.anim_instance.goToAndStop(0);
+    };
+
+    return Interactions;
+})();
